@@ -1,20 +1,23 @@
-import { useState } from "react";
 import Header from "../Header/Header";
 import HomePage from "../../pages/HomePage";
-import { ThemeToggle } from "../ThemeToggle";
-import { Footer } from "../Footer/Footer";
+
+import Footer from "../Footer/Footer";
+
+import Counter from "../Counter";
+
 import "./App.css";
+import UserProfile from "../UserProfile";
+import ParentComponent from "../ParentComponent";
 
 function App() {
-  const [clicks, setClicks] = useState(5);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [text, setText] = useState("Какой-то текст");
   return (
     <main className="app">
-      <Header clicks={clicks} text={text} />
-      <HomePage clicks={clicks} setClicks={setClicks} />
-      <ThemeToggle isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
-      <Footer isDarkMode={isDarkMode} text={text} setText={setText} />
+      <Header />
+      <HomePage />
+      <Counter />
+      <UserProfile />
+      <ParentComponent />
+      <Footer />
     </main>
   );
 }
