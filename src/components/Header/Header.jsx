@@ -1,3 +1,4 @@
+import Button from "../Button";
 import "./Header.css";
 
 const Header = () => {
@@ -11,6 +12,14 @@ const Header = () => {
   return (
     <header className="container" style={style}>
       <h1>Заголовок</h1>
+      <Button
+        label={"Регистрация"}
+        btnStyles={{ height: 20, background: "red" }}
+      />
+      <Button
+        label={"Авторизация"}
+        btnStyles={{ height: 20, background: "green" }}
+      />
     </header>
   );
 };
