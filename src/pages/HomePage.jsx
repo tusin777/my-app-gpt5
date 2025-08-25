@@ -1,40 +1,32 @@
-// import Greeting from "./Greeting";
-
-// import UserProfile from "./UserProfile";
-
-import WelcomeMessage from "./WelcomeMessage";
-
+import UserList from "./UserList";
+import Tasks from "./Tasks";
+import Comments from "./Comments";
+import Products from "./Products";
+import { v4 as uuidv4 } from "uuid";
 import "./HomePage.css";
-// import TodoList from "./TodoList";
-// import Notification from "./Notification";
+const numbers = [1, 2, 3, 4, 5, 6];
+// const listItems = numbers.map((number) => <li>{number}</li>); // предупреждение: нет key
+// const listItems = numbers.map((number) => (
+//   <li key={number.toString()}>{number}</li>
+// ));// ключ как строка
 
-// const messages = ["Сообщение 1", "Сообщение 2", "jjk"];
+// const listItems = numbers.map((number, i) => <li key={i}>{number}</li>); // допустимо для статического, но нежелательно в динамическом списке
 
-// const messages = ["Сообщение 1", "Сообщение 2"];
-// const user = {
-//   name: "Иван",
-//   age: 25,
-// };
-
-// const todos = [
-//   { id: 1, text: "Изучить React", completed: true },
-//   { id: 2, text: "Создать проект", completed: false },
-// ];
-
-const isLoggedIn = true;
+const listItems = numbers.map((number) => <li key={uuidv4()}>{number}</li>);
+const listItems2 = numbers.map((number) => (
+  <li key={uuidv4()}>{number + " " + uuidv4()}</li>
+));
 
 function HomePage() {
   return (
     <>
-      <div>Домашняя страница</div>
-      {/* <Greeting isLoggedIn={true} />
-      <Greeting isLoggedIn={false} /> */}
-      {/* <Notification messages={messages} /> */}
-      {/* <Notification messages={[]} /> */}
-      {/* <UserProfile user={user} />
-      <UserProfile user={null} />
-      <TodoList todos={todos} /> */}
-      <WelcomeMessage isLoggedIn={isLoggedIn} />
+      <UserList />
+      <Tasks />
+      <Comments />
+      <Products />
+
+      <ul>{listItems}</ul>
+      <ul>{listItems2}</ul>
     </>
   );
 }
