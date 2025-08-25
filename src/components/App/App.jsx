@@ -3,20 +3,23 @@ import HomePage from "../../pages/HomePage";
 
 import Footer from "../Footer/Footer";
 
-import Counter from "../Counter";
-
 import "./App.css";
-import UserProfile from "../UserProfile";
-import ParentComponent from "../ParentComponent";
 
 function App() {
+  // const handleClick = () => {
+  //   alert(message);
+  // };
+
+  // const handleClick = (message) => {
+  //   alert(message);
+  // };
+
   return (
     <main className="app">
-      <Header />
+      {/* <Header />
+      <HomePage message="Переданное сообщение" handleClick={handleClick} /> */}
       <HomePage />
-      <Counter />
-      <UserProfile />
-      <ParentComponent />
+
       <Footer />
     </main>
   );
