@@ -1,7 +1,7 @@
 import "./Footer.css";
 import styles from "./Footer.module.css";
 
-export default function Footer() {
+export function Footer() {
   return (
     <footer className={`footer ${styles.footer}`}>
       <p>Подвал сайта</p>
