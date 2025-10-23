@@ -9,14 +9,14 @@ const App = () => {
 
   return (
     <div>
-      <h1>Привет, {name} </h1>
+      <h1>Привет, {name}!</h1>
       <input
         type="text"
         value={name}
-        placeholder="Введите ваше имя"
         onChange={(e) => handleSetName(e.target.value)}
+        placeholder="Введите ваше имя"
       />
-      <button onClick={handleRemoveName}>Очистить поле ввода</button>
+      <button onClick={handleRemoveName}>Очистить имя</button>
       <Setting />
     </div>
   );

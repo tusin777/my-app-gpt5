@@ -1,7 +1,8 @@
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
-const Setting = () => {
+function Setting() {
   const [theme, setTheme] = useLocalStorage("theme", "light");
+
   const [language, setLanguage] = useLocalStorage("language", "ru");
 
   return (
@@ -26,6 +27,6 @@ const Setting = () => {
       <p>Текущий язык: {language}</p>
     </div>
   );
-};
+}
 
 export default Setting;

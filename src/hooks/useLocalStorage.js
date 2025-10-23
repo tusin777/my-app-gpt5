@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 export const useLocalStorage = (key, initialValue) => {
   const getStoredValue = () => {
@@ -6,7 +6,8 @@ export const useLocalStorage = (key, initialValue) => {
       const item = localStorage.getItem(key);
       return item ? JSON.parse(item) : initialValue;
     } catch (error) {
-      console.error("Ошибка получения данных из LocalStorage", error);
+      console.error("Ошибка чтения данных из localStorage", error);
+      return initialValue;
     }
   };
 
@@ -17,16 +18,16 @@ export const useLocalStorage = (key, initialValue) => {
       setStoredValue(value);
       localStorage.setItem(key, JSON.stringify(value));
     } catch (error) {
-      console.error("Ошибка добавления данных в LocalStorage", error);
+      console.error("Ошибка добавления в localStorage", error);
     }
   };
 
   const removeValue = () => {
     try {
       localStorage.removeItem(key);
-      storedValue(initialValue);
+      setStoredValue(initialValue);
     } catch (error) {
-      console.error("Ошибка удаления данных в LocalStorage", error);
+      console.error("Ошибка удаления из localStorage", error);
     }
   };
 
