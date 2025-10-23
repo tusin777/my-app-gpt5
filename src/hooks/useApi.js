@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useDebugValue } from "react";
 import axios from "axios";
 
 const useApi = (baseUrl) => {
@@ -31,6 +31,11 @@ const useApi = (baseUrl) => {
   const put = useCallback((e, b) => request("put", e, b), [request]);
   const patch = useCallback((e, b) => request("patch", e, b), [request]);
   const remove = useCallback((e) => request("delete", e), [request]);
+
+  useDebugValue(
+    { data, error },
+    ({ data, error }) => `data: ${JSON.stringify(data)}, error: ${error}`
+  );
 
   return { data, loading, error, get, post, put, patch, remove };
 };
