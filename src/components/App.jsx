@@ -1,9 +1,17 @@
-import Counter from "./Counter";
+import BasicExample from "./BasicExample";
+import { FilterExample } from "./FilterExample";
+import { SlowRenderExample } from "./SlowRenderExample";
+import { SyncTabExample } from "./SyncTabExapmle";
+import { TabExample } from "./TabExample";
 
 function App() {
   return (
     <>
-      <Counter />
+      {/* <BasicExample /> */}
+      {/* <SlowRenderExample /> */}
+      {/* <FilterExample /> */}
+      {/* <TabExample /> */}
+      <SyncTabExample />
     </>
   );
 }
