@@ -1,31 +1,25 @@
-// src/App.jsx
-import { lazy, Suspense, useState } from "react";
-
-const TextComponent = lazy(() => import("./components/TextComponent"));
-const TodoComponent = lazy(() => import("./components/TodoComponent"));
+import { useId } from "react";
 
 function App() {
-  const [showText, setShowText] = useState(false);
-  const [showTodo, setShowTodo] = useState(false);
+  const id = useId();
+
+  const emailId = `${useId()} - email`;
 
   return (
-    <div>
-      <h2>1. Загрузка компонента</h2>
-      <button onClick={() => setShowText((v) => !v)}>
-        {showText ? "Скрыть" : "Показать"} компонент
-      </button>
-      <Suspense fallback={<div>Загрузка текстового компонента…</div>}>
-        {showText && <TextComponent />}
-      </Suspense>
+    <>
+      <label htmlFor={emailId}>Введите email </label>
+      <input type="email" id={emailId} />
 
-      <h2>2. Загрузка компонента списка задач</h2>
-      <button onClick={() => setShowTodo((v) => !v)}>
-        {showTodo ? "Скрыть" : "Показать"} список задач
-      </button>
-      <Suspense fallback={<div>Загрузка списка задач…</div>}>
-        {showTodo && <TodoComponent />}
-      </Suspense>
-    </div>
+      <label>
+        <p>Согласен с условиями пользования</p>
+        <input type="checkbox" />
+      </label>
+
+      <br />
+
+      <label htmlFor={id}>Введите пароль</label>
+      <input type="password" name="password" id={id} />
+    </>
   );
 }
 
