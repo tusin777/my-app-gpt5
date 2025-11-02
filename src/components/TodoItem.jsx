@@ -1,14 +1,17 @@
-const TodoItem = ({ todo, onDelete, onToggleComplete }) => {
+export const TodoItem = ({ todo, onDelete, onToggleComplete }) => {
   const handleToggle = () => {
     onToggleComplete(todo.id);
   };
 
   return (
-    <div className="group flex justify-between items-center gap-3 bg-white dark:bg-page-dark shadow-sm hover:shadow-md p-4 border border-gray-100 rounded-lg h-12 transition-shadow duration-300">
+    <div
+      className="group flex items-center 
+    justify-between p-4 gap-3 bg-white dark:bg-page-dark rounded-lg h-12 shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100"
+    >
       <div className="flex items-center gap-3">
         <button
           onClick={handleToggle}
-          className={`p-1 rounded-full cursor-pointer border-2 ${
+          className={`p-1 rounded-full border-2 cursor-pointer ${
             todo.completed
               ? "border-green-500 bg-green-500"
               : "border-gray-300 hover:border-gray-400"
@@ -41,11 +44,12 @@ const TodoItem = ({ todo, onDelete, onToggleComplete }) => {
           {todo.text}
         </span>
         <div className="flex flex-col">
-          <span className="text-gray-400 text-xs">
+          <span className="text-xs text-gray-400">
             Создано:{" "}
-            {new Date(todo.createdAt).toLocaleString("pl-PL", {
+            {new Date(todo.createdAt).toLocaleString("ru-RU", {
               day: "numeric",
               month: "long",
+              year: "numeric",
               hour: "2-digit",
               minute: "2-digit",
             })}
@@ -61,9 +65,10 @@ const TodoItem = ({ todo, onDelete, onToggleComplete }) => {
               }`}
             >
               Сделать до:{" "}
-              {new Date(todo.deadline).toLocaleString("pl-PL", {
+              {new Date(todo.deadline).toLocaleString("ru-RU", {
                 day: "numeric",
                 month: "long",
+                year: "numeric",
                 hour: "2-digit",
                 minute: "2-digit",
               })}
@@ -77,7 +82,7 @@ const TodoItem = ({ todo, onDelete, onToggleComplete }) => {
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="w-5 h-5"
+          className="h-5 w-5"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -93,4 +98,3 @@ const TodoItem = ({ todo, onDelete, onToggleComplete }) => {
     </div>
   );
 };
-export default TodoItem;
