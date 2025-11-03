@@ -4,20 +4,16 @@ import { AddTodo } from "./components/AddTodo";
 import ToggleTheme from "./components/ToggleTheme";
 import { getInitialTheme } from "./helpers/getInitialTheme";
 import { toggleTheme } from "./helpers/toggleTheme";
-
 import DeleteConfirmModal from "./components/DeleteConfirmModal";
 
 const LOCAL_STORAGE_KEY = "todos";
-
 const API_URL = "https://6907711fb1879c890ed9cda0.mockapi.io/api/v1/todos";
 
 function App() {
   const [todos, setTodos] = useState([]);
   const [theme, setTheme] = useState(getInitialTheme());
-
-  const [isDeletingCompleted, setIsDeletingCompleted] = useState(false);
-
   const [deletingId, setDeletingId] = useState(null);
+  const [isDeletingCompleted, setIsDeletingCompleted] = useState(false);
 
   useEffect(() => {
     const loadInitialData = async () => {
@@ -53,15 +49,12 @@ function App() {
     };
 
     const updatedTodos = [...todos, newTodo];
-
     setTodos(updatedTodos);
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTodos));
+
     try {
       const response = await fetch(API_URL, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newTodo),
       });
 
@@ -74,7 +67,39 @@ function App() {
       setTodos(syncedTodos);
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(syncedTodos));
     } catch (error) {
-      console.error("Ошибка добавления задачи", error);
+      console.error("Ошибка добавления:", error);
+      setTodos(todos);
+    }
+  };
+
+  const handleUpdate = async (id, newText, newDeadline) => {
+    const todoToUpdate = todos.find((todo) => todo.id === id);
+
+    if (!todoToUpdate) return;
+
+    const updatedTodo = {
+      ...todoToUpdate,
+      text: newText,
+      deadline: newDeadline,
+    };
+
+    const updatedTodos = todos.map((todo) =>
+      todo.id === id ? updatedTodo : todo
+    );
+
+    setTodos(updatedTodos);
+
+    try {
+      await fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedTodo),
+      });
+
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTodos));
+    } catch (error) {
+      console.error("Ошибка обновления:", error);
       setTodos(todos);
     }
   };
@@ -98,33 +123,32 @@ function App() {
     try {
       await fetch(`${API_URL}/${id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedTodo),
       });
+
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTodos));
     } catch (error) {
-      console.error("Ошибка обновления ", error);
+      console.error("Ошибка обновления:", error);
       setTodos(todos);
     }
   };
 
   const handleDelete = async (id) => {
     const previousTodos = todos;
-
     const updatedTodos = todos.filter((todo) => todo.id !== id);
-
     setTodos(updatedTodos);
 
     try {
       await fetch(`${API_URL}/${id}`, { method: "DELETE" });
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTodos));
     } catch (error) {
-      console.error("Ошибка удаления: ", error);
+      console.error("Ошибка удаления:", error);
       setTodos(previousTodos);
     }
   };
+
   const hasCompletedTodos = todos.some((todo) => todo.completed);
 
   const handleDeleteCompleted = () => {
@@ -147,7 +171,7 @@ function App() {
       try {
         await fetch(`${API_URL}/${id}`, { method: "DELETE" });
       } catch (error) {
-        console.error(`Ошибка удаления задачи ${id}: `, error);
+        console.error(`Ошибка удаления задачи ${id}:`, error);
         failedIds.push(id);
       }
     }
@@ -184,6 +208,7 @@ function App() {
               todo={todo}
               onDelete={() => setDeletingId(todo.id)}
               onToggleComplete={toggleComplete}
+              onUpdate={handleUpdate}
             />
           ))}
         </div>
@@ -195,24 +220,24 @@ function App() {
             handleDelete(deletingId);
             setDeletingId(null);
           }}
-          message="Вы уверены что хотите удалить эту задачу?"
+          message="Вы уверены, что хотите удалить эту задачу?"
         />
       )}
       {isDeletingCompleted && (
         <DeleteConfirmModal
           onCancel={() => setIsDeletingCompleted(false)}
           onConfirm={confirmDeleteCompleted}
-          message={`Вы уверены что хотите удалить все выполенные задачи (${
+          message={`Вы уверены, что хотите удалить все выполненные задачи (${
             todos.filter((todo) => todo.completed).length
           })?`}
         />
       )}
       {hasCompletedTodos && (
         <button
-          className="bg-red-500 hover:bg-red-600 mt-3 px-4 py-2 rounded text-white transition-colors cursor-pointer"
           onClick={handleDeleteCompleted}
+          className="bg-red-500 hover:bg-red-600 mt-4 px-4 py-2 rounded text-white transition-colors cursor-pointer"
         >
-          Удалить выполенные
+          Удалить выполненные
         </button>
       )}
     </div>
