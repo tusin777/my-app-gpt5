@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 const LOCAL_STORAGE_KEY = "todos";
-const API_URL = "https://67ed28164387d9117bbc7da1.mockapi.io/api/v1/todos";
+const API_URL = "https://6907711fb1879c890ed9cda0.mockapi.io/api/v1/todos";
 
 export const useTodoManagement = () => {
   const [todos, setTodos] = useState([]);
@@ -14,14 +14,21 @@ export const useTodoManagement = () => {
         localStorage.getItem(LOCAL_STORAGE_KEY) || "[]"
       );
 
-      setTodos(savedTodos);
+      const sortedSavedTodos = [...savedTodos].sort(
+        (a, b) => a.order - b.order
+      );
+
+      setTodos(sortedSavedTodos);
 
       try {
         const response = await fetch(API_URL);
 
         if (response.ok) {
           const serverTodos = await response.json();
-          setTodos(serverTodos);
+          const sortedServerTodos = [...serverTodos].sort(
+            (a, b) => a.order - b.order
+          );
+          setTodos(sortedServerTodos);
           localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(serverTodos));
         }
       } catch (error) {
@@ -180,6 +187,60 @@ export const useTodoManagement = () => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos));
     setIsDeletingCompleted(false);
   };
+
+  const onReorder = async (activeId, overId) => {
+    if (!overId) return;
+
+    try {
+      const activeIndex = todos.findIndex((todo) => todo.id === activeId);
+      const overIndex = todos.findIndex((todo) => todo.id === overId);
+
+      if (activeIndex === -1 || overIndex === -1 || activeIndex === overIndex)
+        return;
+
+      const newTodos = [...todos];
+      const [movedTodo] = newTodos.splice(activeIndex, 1);
+      console.log([movedTodo]);
+      newTodos.splice(overIndex, 0, movedTodo);
+
+      const updatedTodos = newTodos.map((todo, index) => ({
+        ...todo,
+        order: index + 1,
+      }));
+
+      setTodos(updatedTodos);
+
+      // for (const todo of updatedTodos) {
+      //   try {
+      //     await fetch(`${API_URL}/${todo.id}`, {
+      //       method: "PUT",
+      //       headers: { "Content-Type": "application/json" },
+      //       body: JSON.stringify({ order: todo.order }),
+      //     });
+      //   } catch (error) {
+      //     console.error(`Ошибка обновления задачи ${todo.id}:`, error);
+      //     // Можно добавить откат или повторную попытку
+      //   }
+      // }
+      //-------------------------------------------------------
+      await Promise.all(
+        updatedTodos.map((todo) =>
+          fetch(`${API_URL}/${todo.id}`, {
+            method: "PUT",
+
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ order: todo.order }),
+          })
+        )
+      );
+      //--------------------------------------------------------
+
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedTodos));
+    } catch (error) {
+      console.error("Ошибка изменения порядка", error);
+      setTodos(todos);
+    }
+  };
   return {
     todos,
     setTodos,
@@ -194,5 +255,6 @@ export const useTodoManagement = () => {
     handleDeleteCompleted,
     confirmDeleteCompleted,
     hasCompletedTodos,
+    onReorder,
   };
 };
